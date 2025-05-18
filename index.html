@@ -5,108 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Linh Kiện Ngành Lạnh</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      background: #007BFF;
-      color: white;
-      padding: 20px 0;
-    }
-    .tagline {
-      font-size: 18px;
-      color: #f0f0f0;
-    }
-    .product {
-      display: inline-block;
-      border: 1px solid #ddd;
-      margin: 10px;
-      padding: 10px;
-      width: 200px;
-      vertical-align: top;
-    }
-    .product img {
-      width: 100%;
-      height: auto;
-    }
-    .product button {
-      margin: 5px;
-    }
-    footer {
-      margin-top: 30px;
-      background: #f1f1f1;
-      padding: 10px;
-    }
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    header { background: #0d6efd; color: white; text-align: center; padding: 20px 10px; }
+    h1 { margin: 0; font-size: 2em; }
+    p.slogan { font-size: 1em; margin-top: 5px; }
+    .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding: 20px; }
+    .product { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 10px; text-align: center; }
+    .product img { max-width: 100%; height: 150px; object-fit: cover; }
+    .product h3 { font-size: 1.1em; margin: 10px 0 5px; }
+    .product p { margin: 5px 0; }
+    .product button { margin: 5px; padding: 5px 10px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    .cart-link { position: fixed; top: 10px; right: 10px; background: #ffc107; padding: 10px; border-radius: 5px; }
+    footer { text-align: center; padding: 20px; background: #eee; font-size: 1em; }
   </style>
 </head>
 <body>
   <header>
     <h1>Linh Kiện Ngành Lạnh</h1>
-    <div class="tagline">chuyên cung cấp linh kiện điện tử, điện lạnh giá tốt</div>
+    <p class="slogan">chuyên cung cấp linh kiện điện tử, điện lạnh giá tốt</p>
   </header>
-
-  <div id="products"></div>
-
-  <footer>
-    Liên hệ: 0973 942 797
-  </footer>
+  <a class="cart-link" href="checkout.html">Giỏ hàng</a>
+  <div class="container" id="product-list"></div>
+  <footer>Liên hệ: 0973 942 797</footer>
 
   <script>
-    const products = [
-      { name: "Sản phẩm 1", price: 1500000, image: "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lyb0enweawtd3b.webp" },
-      { name: "Sản phẩm 2", price: 1800000, image: "img2.jpg" },
-      { name: "Sản phẩm 3", price: 1800000, image: "img3.jpg" },
-      { name: "Sản phẩm 4", price: 55000, image: "img4.jpg" },
-      { name: "Sản phẩm 5", price: 100000, image: "img5.jpg" },
-      { name: "Sản phẩm 6", price: 120000, image: "img6.jpg" },
-      { name: "Sản phẩm 7", price: 130000, image: "img7.jpg" },
-      { name: "Sản phẩm 8", price: 140000, image: "img8.jpg" },
-      { name: "Sản phẩm 9", price: 150000, image: "img9.jpg" },
-      { name: "Sản phẩm 10", price: 160000, image: "img10.jpg" },
-      { name: "Sản phẩm 11", price: 170000, image: "img11.jpg" },
-      { name: "Sản phẩm 12", price: 180000, image: "img12.jpg" },
-      { name: "Sản phẩm 13", price: 190000, image: "img13.jpg" },
-      { name: "Sản phẩm 14", price: 200000, image: "img14.jpg" },
-      { name: "Sản phẩm 15", price: 210000, image: "img15.jpg" },
-      { name: "Sản phẩm 16", price: 220000, image: "img16.jpg" },
-      { name: "Sản phẩm 17", price: 230000, image: "img17.jpg" },
-      { name: "Sản phẩm 18", price: 240000, image: "img18.jpg" },
-      { name: "Sản phẩm 19", price: 250000, image: "img19.jpg" },
-      { name: "Sản phẩm 20", price: 260000, image: "img20.jpg" },
-      { name: "Sản phẩm 21", price: 270000, image: "img21.jpg" },
-      { name: "Sản phẩm 22", price: 280000, image: "img22.jpg" },
-      { name: "Sản phẩm 23", price: 290000, image: "img23.jpg" },
-      { name: "Sản phẩm 24", price: 300000, image: "img24.jpg" },
-      { name: "Sản phẩm 25", price: 310000, image: "img25.jpg" },
-      { name: "Sản phẩm 26", price: 320000, image: "img26.jpg" }
-    ];
+    const products = Array.from({ length: 26 }, (_, i) => ({
+      id: i + 1,
+      name: `Sản phẩm ${i + 1}`,
+      price: (50000 + i * 10000).toLocaleString('vi-VN') + '₫',
+      image: `img${i + 1}.jpg`
+    }));
 
-    const cart = [];
-
-    function addToCart(product) {
-      cart.push(product);
-      alert(`${product.name} đã được thêm vào giỏ hàng.`);
-    }
-
-    function buyNow(product) {
-      localStorage.setItem("cart", JSON.stringify([product]));
-      window.location.href = "checkout.html";
-    }
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function renderProducts() {
-      const container = document.getElementById("products");
-      container.innerHTML = products.map((p, i) => `
-        <div class="product">
-          <img src="${p.image}" alt="${p.name}" />
-          <h4>${p.name}</h4>
-          <p>${p.price.toLocaleString()}đ</p>
-          <button onclick='addToCart(${JSON.stringify(p)})'>Thêm vào giỏ hàng</button>
-          <button onclick='buyNow(${JSON.stringify(p)})'>Mua hàng</button>
-        </div>
-      `).join("");
+      const list = document.getElementById('product-list');
+      products.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'product';
+        item.innerHTML = `
+          <img src="${p.image}" alt="${p.name}"/>
+          <h3>${p.name}</h3>
+          <p>Giá: ${p.price}</p>
+          <button onclick='addToCart(${p.id})'>Thêm vào giỏ hàng</button>
+          <button onclick='buyNow(${p.id})'>Mua hàng</button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function addToCart(id) {
+      const p = products.find(p => p.id === id);
+      cart.push(p);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`Đã thêm ${p.name} vào giỏ hàng`);
+    }
+
+    function buyNow(id) {
+      const p = products.find(p => p.id === id);
+      localStorage.setItem('cart', JSON.stringify([p]));
+      window.location.href = 'checkout.html';
     }
 
     renderProducts();
