@@ -68,8 +68,28 @@
       background-color: #ffc107;
       color: black;
     }
+
+    #cart-section {
+      background-color: white;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    #cart-section h2 {
+      margin-top: 0;
+    }
+
+    #cart-items li {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+
     footer {
-      margin-top: 30px;
+      margin-top: 40px;
       padding: 20px;
       background-color: #007acc;
       color: white;
@@ -101,7 +121,13 @@
       <button class="cart" onclick="addToCart('Quạt tản nhiệt')">Thêm vào giỏ</button>
     </div>
 
-    <!-- Bạn có thể sao chép các khối <div class="product"> này để thêm sản phẩm mới -->
+    <!-- Thêm nhiều sản phẩm khác tại đây -->
+  </div>
+
+  <!-- Phần hiển thị giỏ hàng -->
+  <div id="cart-section">
+    <h2>Giỏ hàng của bạn</h2>
+    <ul id="cart-items"></ul>
   </div>
 
   <footer>
@@ -109,12 +135,26 @@
   </footer>
 
   <script>
+    const cartItems = [];
+
     function addToCart(productName) {
-      alert("Đã thêm \"" + productName + "\" vào giỏ hàng!");
+      cartItems.push(productName);
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartList = document.getElementById("cart-items");
+      cartList.innerHTML = "";
+      cartItems.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${item}`;
+        cartList.appendChild(li);
+      });
     }
 
     function buyNow(productName) {
-      alert("Bạn đã chọn mua \"" + productName + "\"!");
+      // Chuyển sang trang thanh toán (phần 2 sẽ làm)
+      window.location.href = "thanhtoan.html?sanpham=" + encodeURIComponent(productName);
     }
   </script>
 </body>
