@@ -32,7 +32,7 @@
     const products = Array.from({ length: 26 }, (_, i) => ({
       id: i + 1,
       name: `Sản phẩm ${i + 1}`,
-      price: 1800000.toLocaleString('vi-VN') + '₫',
+      price: (50000 + i * 10000).toLocaleString('vi-VN') + '₫',
       image: `img${i + 1}.jpg`
     }));
 
