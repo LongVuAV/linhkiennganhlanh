@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thanh toán đơn hàng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f7f7f7; }
+    h2 { text-align: center; }
+    form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 10px; }
+    input, textarea {
+      width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px;
+      border: 1px solid #ccc; font-size: 16px;
+    }
+    button {
+      margin-top: 15px; padding: 12px; background: #27ae60; color: white;
+      border: none; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer;
+    }
+    .order-list { background: #f0f0f0; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<h2>THANH TOÁN ĐƠN HÀNG</h2>
+
+<form action="https://formspree.io/f/xgvkdqlb" method="POST">
+  <label>Họ tên người nhận:</label>
+  <input type="text" name="Họ tên" required>
+
+  <label>Số điện thoại:</label>
+  <input type="tel" name="Số điện thoại" required>
+
+  <label>Địa chỉ nhận hàng:</label>
+  <textarea name="Địa chỉ" required></textarea>
+
+  <label>Đơn hàng của bạn:</label>
+  <div id="orderList" class="order-list"></div>
+  <textarea name="Chi tiết đơn hàng" id="orderDetails" readonly style="display:none;"></textarea>
+
+  <button type="submit">Gửi đơn hàng</button>
+</form>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const orderList = document.getElementById("orderList");
+  const orderDetails = document.getElementById("orderDetails");
+  let html = "", text = "";
+
+  if (cart.length === 0) {
+    html = "<p>Chưa có sản phẩm nào trong giỏ hàng!</p>";
+  } else {
+    cart.forEach((item, i) => {
+      html += `<div>${i + 1}. ${item.name} - ${item.price.toLocaleString()}đ</div>`;
+      text += `${i + 1}. ${item.name} - ${item.price}đ\n`;
+    });
+    orderDetails.value = text;
+  }
+
+  orderList.innerHTML = html;
+</script>
+
+</body>
+</html>
