@@ -1,63 +1,125 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Thanh toán đơn hàng</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linh Kiện Ngành Lạnh</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #f7f7f7; }
-    h2 { text-align: center; }
-    form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 10px; }
-    input, textarea {
-      width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px;
-      border: 1px solid #ccc; font-size: 16px;
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+    header { background-color: #2e86c1; color: white; text-align: center; padding: 20px 10px; }
+    h1 { margin: 0; font-size: 32px; }
+    p.tagline { margin-top: 5px; font-size: 16px; color: #e0e0e0; }
+    .products { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
+    .product {
+      width: 220px; margin: 10px; padding: 10px; background: white;
+      border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); text-align: center;
     }
-    button {
-      margin-top: 15px; padding: 12px; background: #27ae60; color: white;
-      border: none; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer;
+    .product img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
+    .product h3 { font-size: 18px; margin: 10px 0 5px; }
+    .product p { margin: 5px 0; color: green; font-weight: bold; }
+    .product button {
+      margin: 5px 3px; padding: 6px 10px; border: none; border-radius: 4px;
+      cursor: pointer; font-size: 14px;
     }
-    .order-list { background: #f0f0f0; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 14px; }
+    .add { background-color: #27ae60; color: white; }
+    .buy { background-color: #e67e22; color: white; }
+    footer { text-align: center; padding: 20px; background: #333; color: white; }
+    #cartModal {
+      display: none; position: fixed; top: 50px; left: 50%; transform: translateX(-50%);
+      background: white; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px #888;
+      width: 90%; max-width: 400px; z-index: 9999;
+    }
+    #cartModal h2 { margin-top: 0; }
+    #cartItems { max-height: 300px; overflow-y: auto; margin: 10px 0; }
+    .cart-item { border-bottom: 1px solid #ccc; padding: 5px 0; }
+    #viewCartBtn {
+      position: fixed; top: 10px; right: 10px; background: #2980b9;
+      color: white; padding: 10px; border-radius: 8px; cursor: pointer;
+    }
+    .checkout-btn {
+      display: inline-block; margin-top: 10px; background: #e74c3c; color: white;
+      padding: 8px 16px; border: none; border-radius: 6px; text-decoration: none;
+    }
   </style>
 </head>
 <body>
 
-<h2>THANH TOÁN ĐƠN HÀNG</h2>
+<header>
+  <h1>Linh Kiện Ngành Lạnh</h1>
+  <p class="tagline">chuyên cung cấp linh kiện điện tử, điện lạnh giá tốt</p>
+</header>
 
-<form action="https://formspree.io/f/xgvkdqlb" method="POST">
-  <label>Họ tên người nhận:</label>
-  <input type="text" name="Họ tên" required>
+<!-- Nút xem giỏ hàng -->
+<div id="viewCartBtn" onclick="toggleCart()">🛒 Giỏ hàng (<span id="cartCount">0</span>)</div>
 
-  <label>Số điện thoại:</label>
-  <input type="tel" name="Số điện thoại" required>
+<!-- Danh sách sản phẩm -->
+<div class="products" id="productList">
+  <!-- Sản phẩm mẫu -->
+  <div class="product">
+    <img src="img/sp1.jpg" alt="Sản phẩm 1">
+    <h3>Module Điều Khiển Quạt</h3>
+    <p>1.500.000đ</p>
+    <button class="add" onclick="addToCart('Module Điều Khiển Quạt', 1500000)">Thêm vào giỏ hàng</button>
+    <button class="buy" onclick="buyNow('Module Điều Khiển Quạt', 1500000)">Mua hàng</button>
+  </div>
 
-  <label>Địa chỉ nhận hàng:</label>
-  <textarea name="Địa chỉ" required></textarea>
+  <div class="product">
+    <img src="img/sp2.jpg" alt="Sản phẩm 2">
+    <h3>Cảm Biến Nhiệt Độ</h3>
+    <p>1.800.000đ</p>
+    <button class="add" onclick="addToCart('Cảm Biến Nhiệt Độ', 1800000)">Thêm vào giỏ hàng</button>
+    <button class="buy" onclick="buyNow('Cảm Biến Nhiệt Độ', 1800000)">Mua hàng</button>
+  </div>
 
-  <label>Đơn hàng của bạn:</label>
-  <div id="orderList" class="order-list"></div>
-  <textarea name="Chi tiết đơn hàng" id="orderDetails" readonly style="display:none;"></textarea>
+  <!-- Thêm thêm nhiều sản phẩm ở đây -->
+</div>
 
-  <button type="submit">Gửi đơn hàng</button>
-</form>
+<!-- Giỏ hàng -->
+<div id="cartModal">
+  <h2>Giỏ hàng của bạn</h2>
+  <div id="cartItems"></div>
+  <a class="checkout-btn" href="checkout.html">Tiến hành đặt hàng</a>
+</div>
+
+<footer>
+  Liên hệ: 0973 942 797
+</footer>
 
 <script>
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  const orderList = document.getElementById("orderList");
-  const orderDetails = document.getElementById("orderDetails");
-  let html = "", text = "";
+  let cart = [];
 
-  if (cart.length === 0) {
-    html = "<p>Chưa có sản phẩm nào trong giỏ hàng!</p>";
-  } else {
-    cart.forEach((item, i) => {
-      html += `<div>${i + 1}. ${item.name} - ${item.price.toLocaleString()}đ</div>`;
-      text += `${i + 1}. ${item.name} - ${item.price}đ\n`;
-    });
-    orderDetails.value = text;
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    alert("Đã thêm vào giỏ hàng!");
+    updateCartCount();
   }
 
-  orderList.innerHTML = html;
+  function buyNow(name, price) {
+    cart = [{ name, price }];
+    window.location.href = "checkout.html";
+  }
+
+  function toggleCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    } else {
+      renderCart();
+      modal.style.display = "block";
+    }
+  }
+
+  function renderCart() {
+    const cartItems = document.getElementById('cartItems');
+    cartItems.innerHTML = "";
+    cart.forEach(item => {
+      cartItems.innerHTML += `<div class="cart-item">${item.name} - ${item.price.toLocaleString()}đ</div>`;
+    });
+  }
+
+  function updateCartCount() {
+    document.getElementById("cartCount").innerText = cart.length;
+  }
 </script>
 
 </body>
