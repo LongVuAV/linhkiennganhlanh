@@ -6,10 +6,11 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
     h2 { text-align: center; }
-    .cart-item { background: #fff; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 6px; }
+    .cart-item { background: #fff; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+    .cart-item button { background: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
     form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
     input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; }
-    button { padding: 10px 15px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button[type="submit"] { padding: 10px 15px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -26,20 +27,38 @@
   </form>
 
   <script>
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const container = document.getElementById('cart-container');
     const orderDetails = document.getElementById('order-details');
 
-    let details = '';
-    cart.forEach((item, index) => {
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.innerHTML = `<strong>${item.name}</strong> - ${item.price}`;
-      container.appendChild(div);
-      details += `${index + 1}. ${item.name} - ${item.price}\n`;
-    });
+    function updateCartDisplay() {
+      container.innerHTML = '';
+      let details = '';
 
-    orderDetails.value = details;
+      cart.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div><strong>${item.name}</strong> - ${item.price}</div>
+          <button onclick="removeItem(${index})">Xóa</button>
+        `;
+        container.appendChild(div);
+        details += `${index + 1}. ${item.name} - ${item.price}\n`;
+      });
+
+      orderDetails.value = details || 'Không có sản phẩm nào trong giỏ hàng.';
+    }
+
+    function removeItem(index) {
+      if (confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?")) {
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartDisplay();
+      }
+    }
+
+    // Lần đầu chạy
+    updateCartDisplay();
   </script>
 </body>
 </html>
