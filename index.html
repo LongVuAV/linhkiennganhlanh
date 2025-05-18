@@ -1,126 +1,115 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Linh Kiện Ngành Lạnh</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
-    header { background-color: #2e86c1; color: white; text-align: center; padding: 20px 10px; }
-    h1 { margin: 0; font-size: 32px; }
-    p.tagline { margin-top: 5px; font-size: 16px; color: #e0e0e0; }
-    .products { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    header {
+      background: #007BFF;
+      color: white;
+      padding: 20px 0;
+    }
+    .tagline {
+      font-size: 18px;
+      color: #f0f0f0;
+    }
     .product {
-      width: 220px; margin: 10px; padding: 10px; background: white;
-      border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); text-align: center;
+      display: inline-block;
+      border: 1px solid #ddd;
+      margin: 10px;
+      padding: 10px;
+      width: 200px;
+      vertical-align: top;
     }
-    .product img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
-    .product h3 { font-size: 18px; margin: 10px 0 5px; }
-    .product p { margin: 5px 0; color: green; font-weight: bold; }
+    .product img {
+      width: 100%;
+      height: auto;
+    }
     .product button {
-      margin: 5px 3px; padding: 6px 10px; border: none; border-radius: 4px;
-      cursor: pointer; font-size: 14px;
+      margin: 5px;
     }
-    .add { background-color: #27ae60; color: white; }
-    .buy { background-color: #e67e22; color: white; }
-    footer { text-align: center; padding: 20px; background: #333; color: white; }
-    #cartModal {
-      display: none; position: fixed; top: 50px; left: 50%; transform: translateX(-50%);
-      background: white; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px #888;
-      width: 90%; max-width: 400px; z-index: 9999;
-    }
-    #cartModal h2 { margin-top: 0; }
-    #cartItems { max-height: 300px; overflow-y: auto; margin: 10px 0; }
-    .cart-item { border-bottom: 1px solid #ccc; padding: 5px 0; }
-    #viewCartBtn {
-      position: fixed; top: 10px; right: 10px; background: #2980b9;
-      color: white; padding: 10px; border-radius: 8px; cursor: pointer;
-    }
-    .checkout-btn {
-      display: inline-block; margin-top: 10px; background: #e74c3c; color: white;
-      padding: 8px 16px; border: none; border-radius: 6px; text-decoration: none;
+    footer {
+      margin-top: 30px;
+      background: #f1f1f1;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Linh Kiện Ngành Lạnh</h1>
+    <div class="tagline">chuyên cung cấp linh kiện điện tử, điện lạnh giá tốt</div>
+  </header>
 
-<header>
-  <h1>Linh Kiện Ngành Lạnh</h1>
-  <p class="tagline">chuyên cung cấp linh kiện điện tử, điện lạnh giá tốt</p>
-</header>
+  <div id="products"></div>
 
-<!-- Nút xem giỏ hàng -->
-<div id="viewCartBtn" onclick="toggleCart()">🛒 Giỏ hàng (<span id="cartCount">0</span>)</div>
+  <footer>
+    Liên hệ: 0973 942 797
+  </footer>
 
-<!-- Danh sách sản phẩm -->
-<div class="products" id="productList">
-  <!-- Sản phẩm mẫu -->
-  <div class="product">
-    <img src="img/sp1.jpg" alt="Sản phẩm 1">
-    <h3>Module Điều Khiển Quạt</h3>
-    <p>1.500.000đ</p>
-    <button class="add" onclick="addToCart('Module Điều Khiển Quạt', 1500000)">Thêm vào giỏ hàng</button>
-    <button class="buy" onclick="buyNow('Module Điều Khiển Quạt', 1500000)">Mua hàng</button>
-  </div>
+  <script>
+    const products = [
+      { name: "Sản phẩm 1", price: 1500000, image: "img1.jpg" },
+      { name: "Sản phẩm 2", price: 1800000, image: "img2.jpg" },
+      { name: "Sản phẩm 3", price: 1800000, image: "img3.jpg" },
+      { name: "Sản phẩm 4", price: 55000, image: "img4.jpg" },
+      { name: "Sản phẩm 5", price: 100000, image: "img5.jpg" },
+      { name: "Sản phẩm 6", price: 120000, image: "img6.jpg" },
+      { name: "Sản phẩm 7", price: 130000, image: "img7.jpg" },
+      { name: "Sản phẩm 8", price: 140000, image: "img8.jpg" },
+      { name: "Sản phẩm 9", price: 150000, image: "img9.jpg" },
+      { name: "Sản phẩm 10", price: 160000, image: "img10.jpg" },
+      { name: "Sản phẩm 11", price: 170000, image: "img11.jpg" },
+      { name: "Sản phẩm 12", price: 180000, image: "img12.jpg" },
+      { name: "Sản phẩm 13", price: 190000, image: "img13.jpg" },
+      { name: "Sản phẩm 14", price: 200000, image: "img14.jpg" },
+      { name: "Sản phẩm 15", price: 210000, image: "img15.jpg" },
+      { name: "Sản phẩm 16", price: 220000, image: "img16.jpg" },
+      { name: "Sản phẩm 17", price: 230000, image: "img17.jpg" },
+      { name: "Sản phẩm 18", price: 240000, image: "img18.jpg" },
+      { name: "Sản phẩm 19", price: 250000, image: "img19.jpg" },
+      { name: "Sản phẩm 20", price: 260000, image: "img20.jpg" },
+      { name: "Sản phẩm 21", price: 270000, image: "img21.jpg" },
+      { name: "Sản phẩm 22", price: 280000, image: "img22.jpg" },
+      { name: "Sản phẩm 23", price: 290000, image: "img23.jpg" },
+      { name: "Sản phẩm 24", price: 300000, image: "img24.jpg" },
+      { name: "Sản phẩm 25", price: 310000, image: "img25.jpg" },
+      { name: "Sản phẩm 26", price: 320000, image: "img26.jpg" }
+    ];
 
-  <div class="product">
-    <img src="img/sp2.jpg" alt="Sản phẩm 2">
-    <h3>Cảm Biến Nhiệt Độ</h3>
-    <p>1.800.000đ</p>
-    <button class="add" onclick="addToCart('Cảm Biến Nhiệt Độ', 1800000)">Thêm vào giỏ hàng</button>
-    <button class="buy" onclick="buyNow('Cảm Biến Nhiệt Độ', 1800000)">Mua hàng</button>
-  </div>
+    const cart = [];
 
-  <!-- Thêm thêm nhiều sản phẩm ở đây -->
-</div>
-
-<!-- Giỏ hàng -->
-<div id="cartModal">
-  <h2>Giỏ hàng của bạn</h2>
-  <div id="cartItems"></div>
-  <a class="checkout-btn" href="checkout.html">Tiến hành đặt hàng</a>
-</div>
-
-<footer>
-  Liên hệ: 0973 942 797
-</footer>
-
-<script>
-  let cart = [];
-
-  function addToCart(name, price) {
-    cart.push({ name, price });
-    alert("Đã thêm vào giỏ hàng!");
-    updateCartCount();
-  }
-
-  function buyNow(name, price) {
-    cart = [{ name, price }];
-    window.location.href = "checkout.html";
-  }
-
-  function toggleCart() {
-    const modal = document.getElementById('cartModal');
-    if (modal.style.display === "block") {
-      modal.style.display = "none";
-    } else {
-      renderCart();
-      modal.style.display = "block";
+    function addToCart(product) {
+      cart.push(product);
+      alert(`${product.name} đã được thêm vào giỏ hàng.`);
     }
-  }
 
-  function renderCart() {
-    const cartItems = document.getElementById('cartItems');
-    cartItems.innerHTML = "";
-    cart.forEach(item => {
-      cartItems.innerHTML += `<div class="cart-item">${item.name} - ${item.price.toLocaleString()}đ</div>`;
-    });
-  }
+    function buyNow(product) {
+      localStorage.setItem("cart", JSON.stringify([product]));
+      window.location.href = "checkout.html";
+    }
 
-  function updateCartCount() {
-    document.getElementById("cartCount").innerText = cart.length;
-  }
-</script>
+    function renderProducts() {
+      const container = document.getElementById("products");
+      container.innerHTML = products.map((p, i) => `
+        <div class="product">
+          <img src="${p.image}" alt="${p.name}" />
+          <h4>${p.name}</h4>
+          <p>${p.price.toLocaleString()}đ</p>
+          <button onclick='addToCart(${JSON.stringify(p)})'>Thêm vào giỏ hàng</button>
+          <button onclick='buyNow(${JSON.stringify(p)})'>Mua hàng</button>
+        </div>
+      `).join("");
+    }
 
+    renderProducts();
+  </script>
 </body>
 </html>
