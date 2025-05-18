@@ -29,12 +29,27 @@
   <footer>Liên hệ: 0973 942 797</footer>
 
   <script>
-    const products = Array.from({ length: 26 }, (_, i) => ({
-      id: i + 1,
-      name: `Sản phẩm ${i + 1}`,
-      price: (50000 + i * 10000).toLocaleString('vi-VN') + '₫',
-      image: `img${i + 1}.jpg`
-    }));
+    const products = [
+  {
+    id: 1,
+    name: "Tụ gốm 104",
+    price: "2.000₫",
+    image: "img/tugom104.jpg"
+  },
+  {
+    id: 2,
+    name: "Điện trở 10kΩ 1/4W",
+    price: "1.500₫",
+    image: "img/dienro10k.jpg"
+  },
+  {
+    id: 3,
+    name: "IC NE555 chính hãng",
+    price: "5.000₫",
+    image: "img/ne555.jpg"
+  },
+  // Bạn thêm các sản phẩm khác tại đây...
+];
 
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
