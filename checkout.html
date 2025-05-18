@@ -2,44 +2,115 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Thanh toán - Linh Kiện Ngành Lạnh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linh Kiện Ngành Lạnh</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    h2 { text-align: center; }
-    .cart-item { background: #fff; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 6px; }
-    form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
-    input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; }
-    button { padding: 10px 15px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    body { font-family: Arial; padding: 20px; background: #f0f0f0; }
+    h1 { color: #006699; }
+    .product { background: white; padding: 10px; margin: 10px; border-radius: 8px; display: inline-block; width: 200px; vertical-align: top; }
+    .product img { width: 100%; height: auto; }
+    .product button { margin-top: 5px; padding: 5px 10px; }
+    #cart, #checkout { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; }
+    .cart-item { display: flex; justify-content: space-between; margin: 5px 0; }
   </style>
 </head>
 <body>
-  <h2>Thông tin thanh toán</h2>
 
-  <div id="cart-container"></div>
+  <h1>Linh Kiện Ngành Lạnh</h1>
+  <p>Chuyên cung cấp linh kiện và phụ tùng ngành lạnh chất lượng cao.</p>
 
-  <form id="order-form" action="https://formspree.io/f/xgvkdqlb" method="POST">
-    <input type="text" name="Họ tên" placeholder="Nhập họ tên người nhận" required>
-    <input type="tel" name="Số điện thoại" placeholder="Nhập số điện thoại" required>
-    <textarea name="Địa chỉ" placeholder="Nhập địa chỉ nhận hàng" required></textarea>
-    <textarea id="order-details" name="Thông tin đơn hàng" readonly></textarea>
-    <button type="submit">Gửi đơn hàng</button>
-  </form>
+  <div id="product-list"></div>
+
+  <div id="cart">
+    <h2>🛒 Giỏ hàng</h2>
+    <div id="cart-items"></div>
+    <button onclick="showCheckout()">Mua hàng</button>
+  </div>
+
+  <div id="checkout" style="display:none;">
+    <h2>Thông tin đặt hàng</h2>
+    <form onsubmit="submitOrder(event)">
+      <label>Họ tên:</label><br><input type="text" required><br>
+      <label>Số điện thoại:</label><br><input type="tel" required><br>
+      <label>Địa chỉ giao hàng:</label><br><textarea required></textarea><br>
+      <button type="submit">Xác nhận đặt hàng</button>
+    </form>
+  </div>
+
+  <p>Liên hệ: 0123 456 789 | Zalo: @linhkienlanh</p>
 
   <script>
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const container = document.getElementById('cart-container');
-    const orderDetails = document.getElementById('order-details');
+    const products = Array.from({length: 26}, (_, i) => ({
+      id: i + 1,
+      name: `Sản phẩm ${i + 1}`,
+      price: 100000 + i * 10000,
+      image: "https://via.placeholder.com/200x150?text=SP+" + (i + 1)
+    }));
 
-    let details = '';
-    cart.forEach((item, index) => {
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.innerHTML = `<strong>${item.name}</strong> - ${item.price}`;
-      container.appendChild(div);
-      details += `${index + 1}. ${item.name} - ${item.price}\n`;
-    });
+    const cart = [];
 
-    orderDetails.value = details;
+    function renderProducts() {
+      const list = document.getElementById('product-list');
+      list.innerHTML = '';
+      products.forEach(product => {
+        list.innerHTML += `
+          <div class="product">
+            <img src="${product.image}" alt="${product.name}">
+            <h4>${product.name}</h4>
+            <p>Giá: ${product.price.toLocaleString()} đ</p>
+            <button onclick="addToCart(${product.id})">Thêm vào giỏ hàng</button>
+          </div>
+        `;
+      });
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      cart.push(product);
+      updateCart();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function updateCart() {
+      const container = document.getElementById('cart-items');
+      container.innerHTML = '';
+      if (cart.length === 0) {
+        container.innerHTML = "<p>Giỏ hàng trống.</p>";
+        return;
+      }
+      cart.forEach((item, index) => {
+        container.innerHTML += `
+          <div class="cart-item">
+            <span>${item.name} - ${item.price.toLocaleString()} đ</span>
+            <button onclick="removeFromCart(${index})">Xoá</button>
+          </div>
+        `;
+      });
+    }
+
+    function showCheckout() {
+      if (cart.length === 0) {
+        alert("Giỏ hàng đang trống!");
+        return;
+      }
+      document.getElementById('checkout').style.display = 'block';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      alert("Đơn hàng đã được gửi! Cảm ơn quý khách.");
+      cart.length = 0;
+      updateCart();
+      document.getElementById('checkout').style.display = 'none';
+    }
+
+    renderProducts();
+    updateCart();
   </script>
 </body>
 </html>
